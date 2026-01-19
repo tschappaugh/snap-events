@@ -5,6 +5,7 @@
 !.gitignore
 !CLAUDE.md
 !README.md
+!CONTRIBUTING.md
 
 # Track wp-content structure for plugins and themes
 !app/
