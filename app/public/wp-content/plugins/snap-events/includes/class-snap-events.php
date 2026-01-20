@@ -91,9 +91,8 @@ class Snap_Events {
         $meta = new Snap_Events_Meta();
         $meta->register_meta_fields();
         
-        // Register the Gutenberg block
-        $block = new Snap_Events_Block();
-        $block->register_block();
+        // Block registers itself via constructor hook
+        new Snap_Events_Block();
         
         // Initialize template loader
         new Snap_Events_Template();

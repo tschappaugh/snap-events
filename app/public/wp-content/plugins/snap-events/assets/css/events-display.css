@@ -1,0 +1,170 @@
+/**
+ * Snap Events - Frontend Styles
+ *
+ * Styles for the Events Grid block display.
+ */
+
+/* ==========================================================================
+   CSS Custom Properties
+   ========================================================================== */
+
+:root {
+    --snap-events-card-bg: #2e3858;
+    --snap-events-card-text: rgba(255, 255, 255, 0.7);
+    --snap-events-card-heading: #fff;
+    --snap-events-card-link: #fff;
+    --snap-events-gap: 30px;
+}
+
+/* ==========================================================================
+   Grid Layout
+   ========================================================================== */
+
+.snap-events-grid {
+    display: grid;
+    gap: var(--snap-events-gap);
+}
+
+/* Column variations */
+.snap-events-columns-1 {
+    grid-template-columns: 1fr;
+}
+
+.snap-events-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.snap-events-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.snap-events-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* ==========================================================================
+   Event Card
+   ========================================================================== */
+
+.snap-event-card {
+    background-color: var(--snap-events-card-bg);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Card Image
+   ========================================================================== */
+
+.snap-event-image {
+    margin-bottom: 20px;
+}
+
+.snap-event-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   Card Content
+   ========================================================================== */
+
+.snap-event-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.snap-event-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 15px 0;
+}
+
+.snap-event-title a {
+    color: var(--snap-events-card-heading);
+    text-decoration: none;
+}
+
+.snap-event-title a:hover {
+    text-decoration: underline;
+}
+
+.snap-event-date,
+.snap-event-location {
+    font-size: 14px;
+    color: var(--snap-events-card-text);
+    margin: 0 0 10px 0;
+}
+
+.snap-event-date strong,
+.snap-event-location strong {
+    color: var(--snap-events-card-heading);
+}
+
+.snap-event-excerpt {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--snap-events-card-text);
+    margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   Card Link
+   ========================================================================== */
+
+.snap-event-link {
+    margin-top: auto;
+    color: var(--snap-events-card-link);
+    text-decoration: underline;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.snap-event-link:hover {
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   Empty State
+   ========================================================================== */
+
+.snap-events-no-events {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 980px) {
+    .snap-events-columns-3,
+    .snap-events-columns-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .snap-events-grid {
+        gap: 20px;
+    }
+
+    .snap-events-columns-2,
+    .snap-events-columns-3,
+    .snap-events-columns-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .snap-event-card {
+        padding: 20px;
+    }
+}
