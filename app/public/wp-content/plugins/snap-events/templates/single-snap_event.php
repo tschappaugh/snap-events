@@ -25,7 +25,7 @@ get_header();
         $city       = get_post_meta( get_the_ID(), 'city', true );
         $state      = get_post_meta( get_the_ID(), 'state', true );
         $country    = get_post_meta( get_the_ID(), 'country', true );
-        
+
         // Format dates
         $formatted_start = '';
         $formatted_end   = '';
@@ -52,9 +52,10 @@ get_header();
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
         <header class="entry-header">
             <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-            <div class="snap-event-meta">
+
+            <div class="snap-event-meta" style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 4px;">
                 <?php if ( $formatted_start ) : ?>
-                    <p class="snap-event-date">
+                    <p class="snap-event-date" style="margin: 0 0 10px 0; color: #333;">
                         <strong><?php esc_html_e( 'Date:', 'snap-events' ); ?></strong>
                         <?php echo esc_html( $formatted_start ); ?>
                         <?php if ( $formatted_end && $formatted_end !== $formatted_start ) : ?>
@@ -63,7 +64,7 @@ get_header();
                     </p>
                 <?php endif; ?>
                 <?php if ( $location ) : ?>
-                    <p class="snap-event-location">
+                    <p class="snap-event-location" style="margin: 0; color: #333;">
                         <strong><?php esc_html_e( 'Location:', 'snap-events' ); ?></strong>
                         <?php echo esc_html( $location ); ?>
                     </p>
