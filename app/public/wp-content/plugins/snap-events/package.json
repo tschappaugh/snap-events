@@ -6,8 +6,8 @@
     "license": "GPL-2.0-or-later",
     "main": "build/index.js",
     "scripts": {
-        "build": "wp-scripts build src/blocks/events-grid/index.js src/editor/index.js",
-        "start": "wp-scripts start src/blocks/events-grid/index.js src/editor/index.js",
+        "build": "wp-scripts build src/blocks/events-grid/index.js --output-path=build/blocks/events-grid",
+        "start": "wp-scripts start src/blocks/events-grid/index.js --output-path=build/blocks/events-grid",
         "format": "wp-scripts format",
         "lint:js": "wp-scripts lint-js",
         "lint:css": "wp-scripts lint-style",

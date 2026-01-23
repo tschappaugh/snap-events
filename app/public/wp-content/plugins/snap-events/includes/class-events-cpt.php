@@ -67,7 +67,7 @@ class Snap_Events_CPT {
             'hierarchical'       => false,
             'menu_position'      => 5,
             'menu_icon'          => 'dashicons-calendar-alt',
-            'supports'           => [ 'title', 'editor', 'excerpt', 'thumbnail' ],
+            'supports'           => [ 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields' ],
             'show_in_rest'       => true,
         ];
         

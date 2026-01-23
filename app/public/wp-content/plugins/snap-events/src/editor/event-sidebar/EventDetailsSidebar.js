@@ -92,13 +92,19 @@ export default function EventDetailsSidebar() {
         []
     );
 
+    // Get and set meta values using useEntityProp
+    // Must be called before any conditional returns (React hooks rules)
+    const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
+
     // Only show for snap_event post type
     if ( postType !== 'snap_event' ) {
         return null;
     }
 
-    // Get and set meta values using useEntityProp
-    const [ meta, setMeta ] = useEntityProp( 'postType', 'snap_event', 'meta' );
+    // Wait for meta to load
+    if ( ! meta ) {
+        return null;
+    }
 
     const updateMeta = ( key, value ) => {
         setMeta( { ...meta, [ key ]: value } );

@@ -10,6 +10,11 @@ import Edit from './edit';
 import save from './save';
 
 /**
+ * Import editor sidebar plugin
+ */
+import '../../editor/event-sidebar';
+
+/**
  * Register the block
  */
 registerBlockType( metadata.name, {
