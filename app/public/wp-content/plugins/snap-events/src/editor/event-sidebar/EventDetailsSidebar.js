@@ -21,18 +21,20 @@ function ymdToDate( ymd ) {
 
 /**
  * Convert Date object to Ymd string (20260115)
+ * Uses UTC methods to avoid timezone issues with DatePicker
  */
 function dateToYmd( date ) {
     if ( ! date ) return '';
     const d = new Date( date );
-    const year = d.getFullYear();
-    const month = String( d.getMonth() + 1 ).padStart( 2, '0' );
-    const day = String( d.getDate() ).padStart( 2, '0' );
+    const year = d.getUTCFullYear();
+    const month = String( d.getUTCMonth() + 1 ).padStart( 2, '0' );
+    const day = String( d.getUTCDate() ).padStart( 2, '0' );
     return `${year}${month}${day}`;
 }
 
 /**
  * Format Ymd for display (20260115 -> January 15, 2026)
+ * Uses UTC to avoid timezone shifts
  */
 function formatYmdForDisplay( ymd ) {
     const date = ymdToDate( ymd );
@@ -41,6 +43,7 @@ function formatYmdForDisplay( ymd ) {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
+        timeZone: 'UTC',
     } );
 }
 

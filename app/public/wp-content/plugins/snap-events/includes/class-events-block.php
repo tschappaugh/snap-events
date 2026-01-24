@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Snap_Events_Block
  *
- * Registers the Events Grid Gutenberg block.
+ * Registers the Events Grid Gutenberg block and editor sidebar.
  */
 class Snap_Events_Block {
 
@@ -23,6 +23,9 @@ class Snap_Events_Block {
     public function __construct() {
         // Register immediately since we're already running on init hook
         $this->register_block();
+
+        // Enqueue editor sidebar scripts
+        add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_assets' ] );
     }
 
     /**
@@ -33,5 +36,28 @@ class Snap_Events_Block {
      */
     public function register_block() {
         register_block_type( SNAP_EVENTS_PLUGIN_DIR . 'build/blocks/events-grid' );
+    }
+
+    /**
+     * Enqueue editor sidebar assets
+     *
+     * Loads the editor sidebar script that provides the Event Details panel.
+     */
+    public function enqueue_editor_assets() {
+        $asset_file = SNAP_EVENTS_PLUGIN_DIR . 'build/editor/index.asset.php';
+
+        if ( ! file_exists( $asset_file ) ) {
+            return;
+        }
+
+        $asset = include $asset_file;
+
+        wp_enqueue_script(
+            'snap-events-editor',
+            SNAP_EVENTS_PLUGIN_URL . 'build/editor/index.js',
+            $asset['dependencies'],
+            $asset['version'],
+            true
+        );
     }
 }
