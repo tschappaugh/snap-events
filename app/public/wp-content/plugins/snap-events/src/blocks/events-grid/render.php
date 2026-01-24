@@ -74,13 +74,22 @@ if ( empty( $events ) ) {
                     </p>
                 <?php endif; ?>
 
+                <?php if ( $show_location && ! empty( $event['venue'] ) ) : ?>
+                    <p class="snap-event-venue">
+                        <strong><?php esc_html_e( 'Venue:', 'snap-events' ); ?></strong>
+                        <span class="snap-event-venue-name"><?php echo esc_html( $event['venue'] ); ?></span>
+                    </p>
+                <?php endif; ?>
+
                 <?php
-                $location = Snap_Events_Query::get_location_string( $event );
+                // Build location string (city, state, country - without venue)
+                $location_parts = array_filter( [ $event['city'], $event['state'], $event['country'] ] );
+                $location = implode( ', ', $location_parts );
                 if ( $show_location && ! empty( $location ) ) :
                 ?>
                     <p class="snap-event-location">
                         <strong><?php esc_html_e( 'Location:', 'snap-events' ); ?></strong>
-                        <?php echo esc_html( $location ); ?>
+                        <span class="snap-event-location-text"><?php echo esc_html( $location ); ?></span>
                     </p>
                 <?php endif; ?>
 

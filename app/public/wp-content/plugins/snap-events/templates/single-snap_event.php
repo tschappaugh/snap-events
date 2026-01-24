@@ -44,8 +44,8 @@ get_header();
             }
         }
         
-        // Build location string
-        $location_parts = array_filter( [ $venue, $city, $state, $country ] );
+        // Build location string (city, state, country - without venue)
+        $location_parts = array_filter( [ $city, $state, $country ] );
         $location = implode( ', ', $location_parts );
     ?>
 
@@ -63,10 +63,16 @@ get_header();
                         <?php endif; ?>
                     </p>
                 <?php endif; ?>
+                <?php if ( $venue ) : ?>
+                    <p class="snap-event-venue" style="margin: 0 0 10px 0; color: #333;">
+                        <strong><?php esc_html_e( 'Venue:', 'snap-events' ); ?></strong>
+                        <span class="snap-event-venue-name"><?php echo esc_html( $venue ); ?></span>
+                    </p>
+                <?php endif; ?>
                 <?php if ( $location ) : ?>
                     <p class="snap-event-location" style="margin: 0; color: #333;">
                         <strong><?php esc_html_e( 'Location:', 'snap-events' ); ?></strong>
-                        <?php echo esc_html( $location ); ?>
+                        <span class="snap-event-location-text"><?php echo esc_html( $location ); ?></span>
                     </p>
                 <?php endif; ?>
             </div>

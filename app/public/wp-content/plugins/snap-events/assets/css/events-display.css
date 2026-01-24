@@ -94,6 +94,7 @@
 }
 
 .snap-event-date,
+.snap-event-venue,
 .snap-event-location {
     font-size: 14px;
     color: var(--snap-events-card-text);
@@ -101,8 +102,18 @@
 }
 
 .snap-event-date strong,
+.snap-event-venue strong,
 .snap-event-location strong {
     color: var(--snap-events-card-heading);
+}
+
+/* Venue and location text spans - customize these for different styling */
+.snap-event-venue-name {
+    /* Add custom venue name styles here */
+}
+
+.snap-event-location-text {
+    /* Add custom location text styles here */
 }
 
 .snap-event-excerpt {
