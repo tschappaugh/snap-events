@@ -53,9 +53,14 @@ $events = Snap_Events_Query::get_events( [
 ] );
 
 // Get block wrapper attributes (applies color, spacing, etc. from block supports)
-$wrapper_attributes = get_block_wrapper_attributes( [
+$anchor = ! empty( $attributes['anchor'] ) ? $attributes['anchor'] : '';
+$wrapper_attrs = [
     'class' => 'snap-events-grid snap-events-columns-' . $columns,
-] );
+];
+if ( $anchor ) {
+    $wrapper_attrs['id'] = $anchor;
+}
+$wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 
 // Start output
 if ( empty( $events ) ) {
