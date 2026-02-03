@@ -8,7 +8,9 @@ import {
     RangeControl,
     ToggleControl,
     TextControl,
+    ColorPalette,
 } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import ServerSideRender from '@wordpress/server-side-render';
 
 /**
@@ -29,10 +31,23 @@ export default function Edit( { attributes, setAttributes } ) {
         showLocation,
         city,
         state,
+        cardBackgroundColor,
+        cardTextColor,
+        cardHeadingColor,
+        cardLinkColor,
+        cardPadding,
+        cardBorderRadius,
+        cardBoxShadow,
+        cardBorderWidth,
+        cardBorderColor,
     } = attributes;
 
     const blockProps = useBlockProps();
-    
+
+    const themeColors = useSelect( ( select ) =>
+        select( 'core/block-editor' ).getSettings().colors
+    );
+
     return (
         <>
             <InspectorControls>
@@ -89,6 +104,68 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={ ( value ) => setAttributes( { state: value } ) }
                         help={ __( 'Filter events by state/province', 'snap-events' ) }
                     />
+                </PanelBody>
+                                <PanelBody title={ __( 'Card Styles', 'snap-events' ) } initialOpen={ false }>
+                    <p>{ __( 'Background Color', 'snap-events' ) }</p>
+                    <ColorPalette
+                        colors={ themeColors }
+                        value={ cardBackgroundColor }
+                        onChange={ ( value ) => setAttributes( { cardBackgroundColor: value } ) }
+                    />
+                    <p>{ __( 'Text Color', 'snap-events' ) }</p>
+                    <ColorPalette
+                        colors={ themeColors }
+                        value={ cardTextColor }
+                        onChange={ ( value ) => setAttributes( { cardTextColor: value } ) }
+                    />
+                    <p>{ __( 'Heading Color', 'snap-events' ) }</p>
+                    <ColorPalette
+                        colors={ themeColors }
+                        value={ cardHeadingColor }
+                        onChange={ ( value ) => setAttributes( { cardHeadingColor: value } ) }
+                    />
+                    <p>{ __( 'Link Color', 'snap-events' ) }</p>
+                    <ColorPalette
+                        colors={ themeColors }
+                        value={ cardLinkColor }
+                        onChange={ ( value ) => setAttributes( { cardLinkColor: value } ) }
+                    />
+                    <RangeControl
+                        label={ __( 'Padding (px)', 'snap-events' ) }
+                        value={ cardPadding }
+                        onChange={ ( value ) => setAttributes( { cardPadding: value } ) }
+                        min={ 0 }
+                        max={ 60 }
+                    />
+                    <RangeControl
+                        label={ __( 'Border Radius (px)', 'snap-events' ) }
+                        value={ cardBorderRadius }
+                        onChange={ ( value ) => setAttributes( { cardBorderRadius: value } ) }
+                        min={ 0 }
+                        max={ 30 }
+                    />
+                    <ToggleControl
+                        label={ __( 'Drop Shadow', 'snap-events' ) }
+                        checked={ cardBoxShadow }
+                        onChange={ ( value ) => setAttributes( { cardBoxShadow: value } ) }
+                    />
+                    <RangeControl
+                        label={ __( 'Border Width (px)', 'snap-events' ) }
+                        value={ cardBorderWidth }
+                        onChange={ ( value ) => setAttributes( { cardBorderWidth: value } ) }
+                        min={ 0 }
+                        max={ 5 }
+                    />
+                    { cardBorderWidth > 0 && (
+                        <>
+                            <p>{ __( 'Border Color', 'snap-events' ) }</p>
+                            <ColorPalette
+                                colors={ themeColors }
+                                value={ cardBorderColor }
+                                onChange={ ( value ) => setAttributes( { cardBorderColor: value } ) }
+                            />
+                        </>
+                    ) }
                 </PanelBody>
             </InspectorControls>
 

@@ -29,6 +29,7 @@ app/public/wp-content/themes/*
 *.DS_Store
 *.log
 node_modules/
+build/
 .env
 *.sql
 *.zip

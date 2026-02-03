@@ -24,6 +24,31 @@ $show_location = isset( $attributes['showLocation'] ) ? $attributes['showLocatio
 $city          = isset( $attributes['city'] ) ? $attributes['city'] : '';
 $state         = isset( $attributes['state'] ) ? $attributes['state'] : '';
 
+// Card style attributes
+$card_bg_color      = isset( $attributes['cardBackgroundColor'] ) ? $attributes['cardBackgroundColor'] : '#2e3858';
+$card_text_color    = isset( $attributes['cardTextColor'] ) ? $attributes['cardTextColor'] : 'rgba(255, 255, 255, 0.7)';
+$card_heading_color = isset( $attributes['cardHeadingColor'] ) ? $attributes['cardHeadingColor'] : '#ffffff';
+$card_link_color    = isset( $attributes['cardLinkColor'] ) ? $attributes['cardLinkColor'] : '#ffffff';
+$card_padding       = isset( $attributes['cardPadding'] ) ? $attributes['cardPadding'] : 30;
+$card_border_radius = isset( $attributes['cardBorderRadius'] ) ? $attributes['cardBorderRadius'] : 0;
+$card_box_shadow    = isset( $attributes['cardBoxShadow'] ) ? $attributes['cardBoxShadow'] : false;
+$card_border_width  = isset( $attributes['cardBorderWidth'] ) ? $attributes['cardBorderWidth'] : 0;
+$card_border_color  = isset( $attributes['cardBorderColor'] ) ? $attributes['cardBorderColor'] : '#cccccc';
+
+// Build card inline styles
+$card_style  = 'background-color: ' . esc_attr( $card_bg_color ) . ';';
+$card_style .= ' color: ' . esc_attr( $card_text_color ) . ';';
+$card_style .= ' padding: ' . intval( $card_padding ) . 'px;';
+if ( $card_border_radius > 0 ) {
+    $card_style .= ' border-radius: ' . intval( $card_border_radius ) . 'px;';
+}
+if ( $card_box_shadow ) {
+    $card_style .= ' box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);';
+}
+if ( $card_border_width > 0 ) {
+    $card_style .= ' border: ' . intval( $card_border_width ) . 'px solid ' . esc_attr( $card_border_color ) . ';';
+}
+
 // Query events using our query class
 $events = Snap_Events_Query::get_events( [
     'posts_per_page' => $count,
@@ -48,7 +73,7 @@ if ( empty( $events ) ) {
 ?>
 <div <?php echo $wrapper_attributes; ?>>
     <?php foreach ( $events as $event ) : ?>
-        <article class="snap-event-card">
+        <article class="snap-event-card" style="<?php echo $card_style; ?> --card-heading-color: <?php echo esc_attr( $card_heading_color ); ?>; --card-link-color: <?php echo esc_attr( $card_link_color ); ?>;">
             <?php if ( $show_image && ! empty( $event['thumbnail_url'] ) ) : ?>
                 <div class="snap-event-image">
                     <a href="<?php echo esc_url( $event['permalink'] ); ?>">
@@ -58,8 +83,8 @@ if ( empty( $events ) ) {
             <?php endif; ?>
 
             <div class="snap-event-content">
-                <h3 class="snap-event-title">
-                    <a href="<?php echo esc_url( $event['permalink'] ); ?>">
+                <h3 class="snap-event-title" style="color: var(--card-heading-color, #ffffff);">
+                    <a href="<?php echo esc_url( $event['permalink'] ); ?>" style="color: var(--card-heading-color, #ffffff);">
                         <?php echo esc_html( $event['title'] ); ?>
                     </a>
                 </h3>
@@ -99,7 +124,7 @@ if ( empty( $events ) ) {
                     </div>
                 <?php endif; ?>
 
-                <a href="<?php echo esc_url( $event['permalink'] ); ?>" class="snap-event-link">
+                <a href="<?php echo esc_url( $event['permalink'] ); ?>" class="snap-event-link" style="color: var(--card-link-color, #ffffff);">
                     <?php esc_html_e( 'View Event', 'snap-events' ); ?>
                 </a>
             </div>

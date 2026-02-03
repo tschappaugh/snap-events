@@ -41,24 +41,49 @@
         "state": {
             "type": "string",
             "default": ""
+        },
+        "cardBackgroundColor": {
+            "type": "string",
+            "default": "#2e3858"
+        },
+        "cardTextColor": {
+            "type": "string",
+            "default": "rgba(255, 255, 255, 0.7)"
+        },
+        "cardHeadingColor": {
+            "type": "string",
+            "default": "#ffffff"
+        },
+        "cardLinkColor": {
+            "type": "string",
+            "default": "#ffffff"
+        },
+        "cardPadding": {
+            "type": "number",
+            "default": 30
+        },
+        "cardBorderRadius": {
+            "type": "number",
+            "default": 0
+        },
+        "cardBoxShadow": {
+            "type": "boolean",
+            "default": false
+        },
+        "cardBorderWidth": {
+            "type": "number",
+            "default": 0
+        },
+        "cardBorderColor": {
+            "type": "string",
+            "default": "#cccccc"
         }
     },
     "supports": {
         "html": false,
         "align": [ "wide", "full" ],
         "spacing": {
-            "margin": true,
-            "padding": true,
             "blockGap": true
-        },
-        "color": {
-            "background": true,
-            "text": true,
-            "link": true
-        },
-        "typography": {
-            "fontSize": true,
-            "lineHeight": true
         }
     },
     "editorScript": "file:./index.js",
