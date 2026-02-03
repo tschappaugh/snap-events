@@ -9,10 +9,6 @@
    ========================================================================== */
 
 :root {
-    --snap-events-card-bg: #2e3858;
-    --snap-events-card-text: rgba(255, 255, 255, 0.7);
-    --snap-events-card-heading: #fff;
-    --snap-events-card-link: #fff;
     --snap-events-gap: 30px;
 }
 
@@ -47,8 +43,6 @@
    ========================================================================== */
 
 .snap-event-card {
-    background-color: var(--snap-events-card-bg);
-    padding: 30px;
     display: flex;
     flex-direction: column;
 }
@@ -85,7 +79,7 @@
 }
 
 .snap-event-title a {
-    color: var(--snap-events-card-heading);
+    color: var(--card-heading-color, #fff);
     text-decoration: none;
 }
 
@@ -97,14 +91,14 @@
 .snap-event-venue,
 .snap-event-location {
     font-size: 14px;
-    color: var(--snap-events-card-text);
+    color: inherit;
     margin: 0 0 10px 0;
 }
 
 .snap-event-date strong,
 .snap-event-venue strong,
 .snap-event-location strong {
-    color: var(--snap-events-card-heading);
+    color: var(--card-heading-color, #fff);
 }
 
 /* Venue and location text spans - customize these for different styling */
@@ -120,7 +114,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
-    color: var(--snap-events-card-text);
+    color: inherit;
     margin-bottom: 20px;
 }
 
@@ -130,7 +124,7 @@
 
 .snap-event-link {
     margin-top: auto;
-    color: var(--snap-events-card-link);
+    color: var(--card-link-color, #fff);
     text-decoration: underline;
     text-transform: uppercase;
     font-size: 14px;
@@ -173,9 +167,5 @@
     .snap-events-columns-3,
     .snap-events-columns-4 {
         grid-template-columns: 1fr;
-    }
-
-    .snap-event-card {
-        padding: 20px;
     }
 }
