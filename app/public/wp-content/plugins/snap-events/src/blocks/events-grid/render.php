@@ -21,8 +21,6 @@ $show_excerpt  = isset( $attributes['showExcerpt'] ) ? $attributes['showExcerpt'
 $show_image    = isset( $attributes['showImage'] ) ? $attributes['showImage'] : true;
 $show_date     = isset( $attributes['showDate'] ) ? $attributes['showDate'] : true;
 $show_location = isset( $attributes['showLocation'] ) ? $attributes['showLocation'] : true;
-$city          = isset( $attributes['city'] ) ? $attributes['city'] : '';
-$state         = isset( $attributes['state'] ) ? $attributes['state'] : '';
 
 // Card style attributes
 $card_bg_color      = isset( $attributes['cardBackgroundColor'] ) ? $attributes['cardBackgroundColor'] : '#2e3858';
@@ -52,8 +50,6 @@ if ( $card_border_width > 0 ) {
 // Query events using our query class
 $events = Snap_Events_Query::get_events( [
     'posts_per_page' => $count,
-    'city'           => $city,
-    'state'          => $state,
 ] );
 
 // Get block wrapper attributes (applies color, spacing, etc. from block supports)

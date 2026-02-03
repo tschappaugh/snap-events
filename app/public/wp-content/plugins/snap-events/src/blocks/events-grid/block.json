@@ -34,14 +34,6 @@
             "type": "boolean",
             "default": true
         },
-        "city": {
-            "type": "string",
-            "default": ""
-        },
-        "state": {
-            "type": "string",
-            "default": ""
-        },
         "cardBackgroundColor": {
             "type": "string",
             "default": "#2e3858"

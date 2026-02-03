@@ -29,8 +29,6 @@ export default function Edit( { attributes, setAttributes } ) {
         showImage,
         showDate,
         showLocation,
-        city,
-        state,
         cardBackgroundColor,
         cardTextColor,
         cardHeadingColor,
@@ -91,21 +89,7 @@ export default function Edit( { attributes, setAttributes } ) {
                     />
                 </PanelBody>
 
-                <PanelBody title={ __( 'Filter Events', 'snap-events' ) } initialOpen={ false }>
-                    <TextControl
-                        label={ __( 'City', 'snap-events' ) }
-                        value={ city }
-                        onChange={ ( value ) => setAttributes( { city: value } ) }
-                        help={ __( 'Filter events by city name', 'snap-events' ) }
-                    />
-                    <TextControl
-                        label={ __( 'State', 'snap-events' ) }
-                        value={ state }
-                        onChange={ ( value ) => setAttributes( { state: value } ) }
-                        help={ __( 'Filter events by state/province', 'snap-events' ) }
-                    />
-                </PanelBody>
-                                <PanelBody title={ __( 'Card Styles', 'snap-events' ) } initialOpen={ false }>
+                <PanelBody title={ __( 'Card Styles', 'snap-events' ) } initialOpen={ false }>
                     <p>{ __( 'Background Color', 'snap-events' ) }</p>
                     <ColorPalette
                         colors={ themeColors }
