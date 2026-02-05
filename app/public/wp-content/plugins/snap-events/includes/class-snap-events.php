@@ -72,9 +72,6 @@ class Snap_Events {
     private function init_hooks() {
         // Initialize components on 'init' hook
         add_action( 'init', [ $this, 'init_components' ] );
-        
-        // Enqueue frontend styles
-        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_frontend_assets' ] );
     }
 
     /**
@@ -96,17 +93,5 @@ class Snap_Events {
         
         // Initialize template loader
         new Snap_Events_Template();
-    }
-
-    /**
-     * Enqueue frontend styles
-     */
-    public function enqueue_frontend_assets() {
-        wp_enqueue_style(
-            'snap-events-frontend',
-            SNAP_EVENTS_PLUGIN_URL . 'assets/css/events-display.css',
-            [],
-            SNAP_EVENTS_VERSION
-        );
     }
 }

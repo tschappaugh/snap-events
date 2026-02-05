@@ -43,7 +43,7 @@ class Snap_Events_Query {
         $args = wp_parse_args( $args, $defaults );
 
         // Today's date in Ymd format for comparison
-        $today = date( 'Ymd' );
+        $today = current_time( 'Ymd' );
 
         // Base query arguments
         $query_args = [
