@@ -32,6 +32,7 @@ $card_border_radius = isset( $attributes['cardBorderRadius'] ) ? $attributes['ca
 $card_box_shadow    = isset( $attributes['cardBoxShadow'] ) ? $attributes['cardBoxShadow'] : false;
 $card_border_width  = isset( $attributes['cardBorderWidth'] ) ? $attributes['cardBorderWidth'] : 0;
 $card_border_color  = isset( $attributes['cardBorderColor'] ) ? $attributes['cardBorderColor'] : '#cccccc';
+$grid_gap           = isset( $attributes['gridGap'] ) ? $attributes['gridGap'] : 30;
 
 // Build card inline styles
 $card_style  = 'background-color: ' . esc_attr( $card_bg_color ) . ';';
@@ -56,7 +57,9 @@ $events = Snap_Events_Query::get_events( [
 $anchor = ! empty( $attributes['anchor'] ) ? $attributes['anchor'] : '';
 $wrapper_attrs = [
     'class' => 'snap-events-grid snap-events-columns-' . $columns,
+    'style' => 'gap: ' . intval( $grid_gap ) . 'px;',
 ];
+
 if ( $anchor ) {
     $wrapper_attrs['id'] = $anchor;
 }

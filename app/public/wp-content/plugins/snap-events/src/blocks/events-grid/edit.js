@@ -38,6 +38,7 @@ export default function Edit( { attributes, setAttributes } ) {
         cardBoxShadow,
         cardBorderWidth,
         cardBorderColor,
+        gridGap,
     } = attributes;
 
     const blockProps = useBlockProps();
@@ -64,6 +65,14 @@ export default function Edit( { attributes, setAttributes } ) {
                         min={ 1 }
                         max={ 4 }
                     />
+                    <RangeControl
+                        label={ __( 'Gap (px)', 'snap-events' ) }
+                        value={ gridGap }
+                        onChange={ ( value ) => setAttributes( { gridGap: value } ) }
+                        min={ 0 }
+                        max={ 60 }
+                    />
+
                 </PanelBody>
 
                 <PanelBody title={ __( 'Content Options', 'snap-events' ) } initialOpen={ false }>

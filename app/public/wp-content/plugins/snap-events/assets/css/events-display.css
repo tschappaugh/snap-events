@@ -5,20 +5,11 @@
  */
 
 /* ==========================================================================
-   CSS Custom Properties
-   ========================================================================== */
-
-:root {
-    --snap-events-gap: 30px;
-}
-
-/* ==========================================================================
    Grid Layout
    ========================================================================== */
 
 .snap-events-grid {
     display: grid;
-    gap: var(--snap-events-gap);
 }
 
 /* Column variations */
@@ -159,10 +150,6 @@
 
 /* Mobile */
 @media (max-width: 767px) {
-    .snap-events-grid {
-        gap: 20px;
-    }
-
     .snap-events-columns-2,
     .snap-events-columns-3,
     .snap-events-columns-4 {

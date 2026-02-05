@@ -73,15 +73,16 @@
         "cardBorderColor": {
             "type": "string",
             "default": "#cccccc"
+        },
+        "gridGap": {
+            "type": "number",
+            "default": 30
         }
     },
     "supports": {
         "html": false,
         "anchor": true,
-        "align": [ "wide", "full" ],
-        "spacing": {
-            "blockGap": true
-        }
+        "align": [ "wide", "full" ]
     },
     "editorScript": "file:./index.js",
     "render": "file:./render.php"
