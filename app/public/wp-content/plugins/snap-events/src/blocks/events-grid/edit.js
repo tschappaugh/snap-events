@@ -9,6 +9,7 @@ import {
     ToggleControl,
     TextControl,
     ColorPalette,
+    SelectControl,
 } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import ServerSideRender from '@wordpress/server-side-render';
@@ -39,6 +40,9 @@ export default function Edit( { attributes, setAttributes } ) {
         cardBorderWidth,
         cardBorderColor,
         gridGap,
+        enableLoadMore,
+        enableSort,
+        defaultSortOrder,
     } = attributes;
 
     const blockProps = useBlockProps();
@@ -73,6 +77,31 @@ export default function Edit( { attributes, setAttributes } ) {
                         max={ 60 }
                     />
 
+                    <ToggleControl
+                        label={ __( 'Enable Load More', 'snap-events' ) }
+                        checked={ enableLoadMore }
+                        onChange={ ( value ) => setAttributes( { enableLoadMore: value } ) }
+                        help={ __( 'Show a button to load additional events', 'snap-events' ) }
+                    />
+
+                    <ToggleControl
+                        label={ __( 'Enable Sort Toggle', 'snap-events' ) }
+                        checked={ enableSort }
+                        onChange={ ( value ) => setAttributes( { enableSort: value } ) }
+                        help={ __( 'Allow visitors to change sort order', 'snap-events' ) }
+                    />
+
+                    { enableSort && (
+                        <SelectControl
+                            label={ __( 'Default Sort Order', 'snap-events' ) }
+                            value={ defaultSortOrder }
+                            options={ [
+                                { label: __( 'Soonest First (ASC)', 'snap-events' ), value: 'ASC' },
+                                { label: __( 'Furthest Out First (DESC)', 'snap-events' ), value: 'DESC' },
+                            ] }
+                            onChange={ ( value ) => setAttributes( { defaultSortOrder: value } ) }
+                        />
+                    ) }
                 </PanelBody>
 
                 <PanelBody title={ __( 'Content Options', 'snap-events' ) } initialOpen={ false }>

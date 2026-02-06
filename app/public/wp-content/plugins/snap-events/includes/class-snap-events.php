@@ -56,6 +56,9 @@ class Snap_Events {
         // REST API meta field registration
         require_once SNAP_EVENTS_PLUGIN_DIR . 'includes/class-events-meta.php';
         
+        // REST API endpoint for events
+        require_once SNAP_EVENTS_PLUGIN_DIR . 'includes/class-events-rest.php';
+        
         // Event query helper class
         require_once SNAP_EVENTS_PLUGIN_DIR . 'includes/class-events-query.php';
         
@@ -87,6 +90,9 @@ class Snap_Events {
         // Register meta fields for REST API
         $meta = new Snap_Events_Meta();
         $meta->register_meta_fields();
+        
+        // Register REST API endpoints
+        new Snap_Events_REST();
         
         // Block registers itself via constructor hook
         new Snap_Events_Block();

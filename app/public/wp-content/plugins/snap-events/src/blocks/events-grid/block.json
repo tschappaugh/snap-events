@@ -77,6 +77,18 @@
         "gridGap": {
             "type": "number",
             "default": 30
+        },
+        "enableLoadMore": {
+            "type": "boolean",
+            "default": true
+        },
+        "enableSort": {
+            "type": "boolean",
+            "default": true
+        },
+        "defaultSortOrder": {
+            "type": "string",
+            "default": "ASC"
         }
     },
     "supports": {
@@ -85,5 +97,6 @@
         "align": [ "wide", "full" ]
     },
     "editorScript": "file:./index.js",
+    "viewScript": "file:./view.js",
     "render": "file:./render.php"
 }

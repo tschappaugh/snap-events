@@ -43,14 +43,25 @@ class Snap_Events_Block {
             SNAP_EVENTS_VERSION
         );
 
-        // Register block with the style
+        // Register the interactive elements stylesheet
+        wp_register_style(
+            'snap-events-interactive-style',
+            SNAP_EVENTS_PLUGIN_URL . 'assets/css/events-interactive.css',
+            [],
+            SNAP_EVENTS_VERSION
+        );
+
+        // Register block with both styles
         register_block_type(
             SNAP_EVENTS_PLUGIN_DIR . 'build/blocks/events-grid',
             [
-                'style' => 'snap-events-grid-style',
+                'style' => [
+                    'snap-events-grid-style',
+                    'snap-events-interactive-style',
+                ],
             ]
         );
-    }
+    }   
 
     /**
      * Enqueue editor sidebar assets

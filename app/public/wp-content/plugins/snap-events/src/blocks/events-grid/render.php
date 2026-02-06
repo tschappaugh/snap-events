@@ -15,12 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Extract attributes with defaults
-$count         = isset( $attributes['count'] ) ? $attributes['count'] : 6;
-$columns       = isset( $attributes['columns'] ) ? $attributes['columns'] : 3;
-$show_excerpt  = isset( $attributes['showExcerpt'] ) ? $attributes['showExcerpt'] : true;
-$show_image    = isset( $attributes['showImage'] ) ? $attributes['showImage'] : true;
-$show_date     = isset( $attributes['showDate'] ) ? $attributes['showDate'] : true;
-$show_location = isset( $attributes['showLocation'] ) ? $attributes['showLocation'] : true;
+$count              = isset( $attributes['count'] ) ? $attributes['count'] : 6;
+$columns            = isset( $attributes['columns'] ) ? $attributes['columns'] : 3;
+$show_excerpt       = isset( $attributes['showExcerpt'] ) ? $attributes['showExcerpt'] : true;
+$show_image         = isset( $attributes['showImage'] ) ? $attributes['showImage'] : true;
+$show_date          = isset( $attributes['showDate'] ) ? $attributes['showDate'] : true;
+$show_location      = isset( $attributes['showLocation'] ) ? $attributes['showLocation'] : true;
+$enable_load_more   = isset( $attributes['enableLoadMore'] ) ? $attributes['enableLoadMore'] : true;
+$enable_sort        = isset( $attributes['enableSort'] ) ? $attributes['enableSort'] : true;
+$default_sort_order = isset( $attributes['defaultSortOrder'] ) ? $attributes['defaultSortOrder'] : 'ASC';
 
 // Card style attributes
 $card_bg_color      = isset( $attributes['cardBackgroundColor'] ) ? $attributes['cardBackgroundColor'] : '#2e3858';
@@ -51,13 +54,43 @@ if ( $card_border_width > 0 ) {
 // Query events using our query class
 $events = Snap_Events_Query::get_events( [
     'posts_per_page' => $count,
+    'order'          => $default_sort_order,
+] );
+
+// Get total count to determine if Load More should be visible
+$total_events = Snap_Events_Query::get_events_count();
+$has_more     = $count < $total_events;
+
+// Build config for frontend JavaScript
+$block_config = wp_json_encode( [
+    'count'              => $count,
+    'columns'            => $columns,
+    'showExcerpt'        => $show_excerpt,
+    'showImage'          => $show_image,
+    'showDate'           => $show_date,
+    'showLocation'       => $show_location,
+    'enableLoadMore'     => $enable_load_more,
+    'enableSort'         => $enable_sort,
+    'defaultSortOrder'   => $default_sort_order,
+    'cardBackgroundColor' => $card_bg_color,
+    'cardTextColor'       => $card_text_color,
+    'cardHeadingColor'    => $card_heading_color,
+    'cardLinkColor'       => $card_link_color,
+    'cardPadding'         => $card_padding,
+    'cardBorderRadius'    => $card_border_radius,
+    'cardBoxShadow'       => $card_box_shadow,
+    'cardBorderWidth'     => $card_border_width,
+    'cardBorderColor'     => $card_border_color,
+    'restUrl'             => esc_url_raw( rest_url( 'snap-events/v1/events' ) ),
+    'restNonce'           => wp_create_nonce( 'wp_rest' ),
 ] );
 
 // Get block wrapper attributes (applies color, spacing, etc. from block supports)
 $anchor = ! empty( $attributes['anchor'] ) ? $attributes['anchor'] : '';
 $wrapper_attrs = [
-    'class' => 'snap-events-grid snap-events-columns-' . $columns,
-    'style' => 'gap: ' . intval( $grid_gap ) . 'px;',
+    'class'       => 'snap-events-grid snap-events-columns-' . $columns,
+    'style'       => 'gap: ' . intval( $grid_gap ) . 'px;',
+    'data-config' => $block_config,
 ];
 
 if ( $anchor ) {
@@ -133,5 +166,27 @@ if ( empty( $events ) ) {
             </div>
         </article>
     <?php endforeach; ?>
+
+    <?php if ( $enable_sort || $enable_load_more ) : ?>
+        <div class="snap-events-controls">
+            <?php if ( $enable_sort ) : ?>
+                <button class="snap-events-sort-toggle" data-current-order="<?php echo esc_attr( $default_sort_order ); ?>" aria-label="<?php esc_attr_e( 'Toggle sort order', 'snap-events' ); ?>">
+                    <span class="snap-events-sort-label">
+                        <?php echo $default_sort_order === 'ASC'
+                            ? esc_html__( 'Soonest First', 'snap-events' )
+                            : esc_html__( 'Furthest Out First', 'snap-events' ); ?>
+                    </span>
+                </button>
+            <?php endif; ?>
+
+            <?php if ( $enable_load_more ) : ?>
+                <button class="snap-events-load-more<?php echo ! $has_more ? ' snap-events-hidden' : ''; ?>" aria-label="<?php esc_attr_e( 'Load more events', 'snap-events' ); ?>">
+                    <?php esc_html_e( 'Load More Events', 'snap-events' ); ?>
+                </button>
+            <?php endif; ?>
+
+            <div class="snap-events-status" role="status" aria-live="polite" aria-atomic="true"></div>
+        </div>
+    <?php endif; ?>
 </div>
 <?php

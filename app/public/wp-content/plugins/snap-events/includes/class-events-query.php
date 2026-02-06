@@ -25,9 +25,8 @@ class Snap_Events_Query {
      *     Optional. Arguments to filter events.
      *
      *     @type int    $posts_per_page Number of events to return. -1 for all. Default -1.
-     *     @type string $city           Filter by city. Default empty.
-     *     @type string $state          Filter by state. Default empty.
-     *     @type string $country        Filter by country. Default empty.
+     *     @type int    $paged          Page number for pagination. Default 1.
+     *     @type string $order          Sort order. 'ASC' or 'DESC'. Default 'ASC'.
      * }
      * @return array Array of event data arrays.
      */
@@ -35,9 +34,8 @@ class Snap_Events_Query {
         // Default arguments
         $defaults = [
             'posts_per_page' => -1,
-            'city'           => '',
-            'state'          => '',
-            'country'        => '',
+            'paged'          => 1,
+            'order'          => 'ASC',
         ];
 
         $args = wp_parse_args( $args, $defaults );
@@ -50,9 +48,10 @@ class Snap_Events_Query {
             'post_type'      => Snap_Events_CPT::POST_TYPE,
             'post_status'    => 'publish',
             'posts_per_page' => $args['posts_per_page'],
+            'paged'          => $args['paged'],
             'meta_key'       => 'start_date',
             'orderby'        => 'meta_value_num',
-            'order'          => 'ASC',
+            'order'          => $args['order'],
         ];
 
         // Meta query to filter only future events
@@ -65,31 +64,6 @@ class Snap_Events_Query {
                 'type'    => 'NUMERIC',
             ],
         ];
-
-        // Add location filters if specified
-        if ( ! empty( $args['city'] ) ) {
-            $meta_query[] = [
-                'key'     => 'city',
-                'value'   => $args['city'],
-                'compare' => '=',
-            ];
-        }
-
-        if ( ! empty( $args['state'] ) ) {
-            $meta_query[] = [
-                'key'     => 'state',
-                'value'   => $args['state'],
-                'compare' => '=',
-            ];
-        }
-
-        if ( ! empty( $args['country'] ) ) {
-            $meta_query[] = [
-                'key'     => 'country',
-                'value'   => $args['country'],
-                'compare' => '=',
-            ];
-        }
 
         $query_args['meta_query'] = $meta_query;
 
@@ -125,6 +99,32 @@ class Snap_Events_Query {
     }
 
     /**
+     * Get total count of upcoming events
+     *
+     * @return int Total count of upcoming events.
+     */
+    public static function get_events_count() {
+        $today = current_time( 'Ymd' );
+
+        $query = new WP_Query( [
+            'post_type'      => Snap_Events_CPT::POST_TYPE,
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_query'     => [
+                [
+                    'key'     => 'start_date',
+                    'value'   => $today,
+                    'compare' => '>=',
+                    'type'    => 'NUMERIC',
+                ],
+            ],
+        ] );
+
+        return $query->found_posts;
+    }
+
+    /**
      * Format a date from Ymd to human-readable format
      *
      * @param string $date Date in Ymd format (e.g., 20260115).
@@ -142,33 +142,5 @@ class Snap_Events_Query {
         }
 
         return $date_obj->format( 'F j, Y' );
-    }
-    
-    /**
-     * Build a location string from event meta
-     *
-     * @param array $event Event data array from get_events().
-     * @return string Formatted location string.
-     */
-    public static function get_location_string( $event ) {
-        $parts = [];
-
-        if ( ! empty( $event['venue'] ) ) {
-            $parts[] = $event['venue'];
-        }
-
-        if ( ! empty( $event['city'] ) ) {
-            $parts[] = $event['city'];
-        }
-
-        if ( ! empty( $event['state'] ) ) {
-            $parts[] = $event['state'];
-        }
-
-        if ( ! empty( $event['country'] ) ) {
-            $parts[] = $event['country'];
-        }
-
-        return implode( ', ', $parts );
     }
 }
