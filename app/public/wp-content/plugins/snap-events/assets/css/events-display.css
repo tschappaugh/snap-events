@@ -78,6 +78,11 @@
     text-decoration: underline;
 }
 
+.snap-event-title a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
 .snap-event-date,
 .snap-event-venue,
 .snap-event-location {
@@ -89,6 +94,7 @@
 .snap-event-date strong,
 .snap-event-venue strong,
 .snap-event-location strong {
+    font-weight: bold;
     color: var(--card-heading-color, #fff);
 }
 

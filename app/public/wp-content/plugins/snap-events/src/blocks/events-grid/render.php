@@ -78,11 +78,10 @@ if ( empty( $events ) ) {
 <div <?php echo $wrapper_attributes; ?>>
     <?php foreach ( $events as $event ) : ?>
         <article class="snap-event-card" style="<?php echo $card_style; ?> --card-heading-color: <?php echo esc_attr( $card_heading_color ); ?>; --card-link-color: <?php echo esc_attr( $card_link_color ); ?>;">
+            
             <?php if ( $show_image && ! empty( $event['thumbnail_url'] ) ) : ?>
                 <div class="snap-event-image">
-                    <a href="<?php echo esc_url( $event['permalink'] ); ?>">
-                        <img src="<?php echo esc_url( $event['thumbnail_url'] ); ?>" alt="<?php echo esc_attr( $event['title'] ); ?>">
-                    </a>
+                    <img src="<?php echo esc_url( $event['thumbnail_url'] ); ?>" alt="" role="presentation">
                 </div>
             <?php endif; ?>
 
@@ -128,7 +127,7 @@ if ( empty( $events ) ) {
                     </div>
                 <?php endif; ?>
 
-                <a href="<?php echo esc_url( $event['permalink'] ); ?>" class="snap-event-link" style="color: var(--card-link-color, #ffffff);">
+                <a href="<?php echo esc_url( $event['permalink'] ); ?>" class="snap-event-link" style="color: var(--card-link-color, #ffffff);" aria-hidden="true" tabindex="-1">
                     <?php esc_html_e( 'View Event', 'snap-events' ); ?>
                 </a>
             </div>
