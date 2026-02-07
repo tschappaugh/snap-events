@@ -4,20 +4,21 @@ This document provides context for Claude Code when working on the Snap Events W
 
 ## Project Overview
 
-**Snap Events** is a WordPress plugin that displays upcoming events using a Gutenberg block. It uses a custom post type with an editor sidebar panel for event meta fields and renders events via a dynamic block.
+**Snap Events** is a WordPress plugin that displays upcoming events using Gutenberg blocks. It uses a custom post type with an editor sidebar panel for event meta fields and renders events via two dynamic blocks.
 
 ### Key Features
 - Custom post type `snap_event` with slug `/events/`
-- Gutenberg block `snap-events/events-grid` for displaying events
+- Gutenberg block `snap-events/events-grid` for displaying events in a card grid
+- Gutenberg block `snap-events/events-list` for displaying events in a single-column list
 - Editor sidebar panel for event data (dates, venue, location) using React
 - Native WordPress featured images (no default thumbnail system)
 - Theme-agnostic single event display via `the_content` filter
-- Responsive design: configurable columns with breakpoints
-- Configurable card styling (colors, padding, borders, shadows)
+- Responsive design: configurable columns (grid) and stacking (list) with breakpoints
+- Configurable styling per block (card colors/shadows for grid, border dividers for list)
 - Load More button for paginated event loading via REST API
 - Sort toggle to switch between ascending/descending date order
-- Custom REST API endpoint for frontend interactivity
-- Accessible: single tab stop per card, decorative images, aria-live regions
+- Custom REST API endpoint shared by both blocks
+- Accessible: single tab stop per card/item, decorative images, aria-live regions
 
 ## Architecture Decisions
 
@@ -51,6 +52,12 @@ This document provides context for Claude Code when working on the Snap Events W
 - Config is scoped to the block wrapper element, not global
 - No naming collisions or global variable pollution
 - JavaScript reads config from the nearest parent element
+
+### Why Two Blocks (Not One Block with Layout Toggle)
+- Each block has distinct styling attributes (card styles vs. border dividers)
+- Simpler code — each block's render.php, edit.js, and view.js handle one layout
+- Users can place both blocks on different pages without attribute conflicts
+- Shared infrastructure: same REST endpoint, query class, and interactive controls
 
 ## Data Structure
 
@@ -115,6 +122,7 @@ GET /wp-json/snap-events/v1/events
 - Public endpoint (no authentication required — same data visible on frontend)
 - Uses `Snap_Events_Query::get_events()` internally for consistent filtering
 - `has_more` is calculated from `page * per_page < total`
+- Shared by both Events Grid and Events List blocks
 
 ## File Structure
 
@@ -127,12 +135,19 @@ snap-events/
 │   ├── class-events-cpt.php           # CPT registration
 │   ├── class-events-meta.php          # REST API meta field registration
 │   ├── class-events-query.php         # WP_Query wrapper, date formatting, count
-│   ├── class-events-block.php         # Block registration + editor assets
+│   ├── class-events-block.php         # Block registration (grid + list) + editor assets
 │   ├── class-events-rest.php          # Custom REST endpoint for Load More / Sort
 │   └── class-events-template.php      # Single event content/block filters
 ├── src/
 │   ├── blocks/
-│   │   └── events-grid/
+│   │   ├── events-grid/
+│   │   │   ├── block.json             # Block metadata + attributes
+│   │   │   ├── index.js               # Block registration
+│   │   │   ├── edit.js                # Editor component (React)
+│   │   │   ├── save.js                # Returns null (dynamic block)
+│   │   │   ├── render.php             # Server-side render callback
+│   │   │   └── view.js               # Frontend JS (Load More + Sort)
+│   │   └── events-list/
 │   │       ├── block.json             # Block metadata + attributes
 │   │       ├── index.js               # Block registration
 │   │       ├── edit.js                # Editor component (React)
@@ -152,18 +167,26 @@ snap-events/
 │   │   ├── view.asset.php
 │   │   ├── block.json
 │   │   └── render.php
+│   ├── blocks/events-list/
+│   │   ├── index.js
+│   │   ├── index.asset.php
+│   │   ├── view.js
+│   │   ├── view.asset.php
+│   │   ├── block.json
+│   │   └── render.php
 │   └── editor/
 │       ├── index.js
 │       └── index.asset.php
 └── assets/
     └── css/
-        ├── events-display.css         # Frontend grid/card styles
-        └── events-interactive.css     # Load More/Sort button styles
+        ├── events-display.css         # Shared content styles (title, date, etc.)
+        ├── events-interactive.css     # Load More/Sort button styles
+        └── events-list.css            # List-specific layout styles
 ```
 
 ## Block Configuration
 
-### Block Attributes (block.json)
+### Events Grid Attributes (block.json)
 ```json
 {
   "anchor": { "type": "string", "default": "" },
@@ -189,38 +212,60 @@ snap-events/
 }
 ```
 
-### Block Supports
+### Events List Attributes (block.json)
+```json
+{
+  "anchor": { "type": "string", "default": "" },
+  "count": { "type": "number", "default": 6 },
+  "showExcerpt": { "type": "boolean", "default": true },
+  "showImage": { "type": "boolean", "default": true },
+  "showDate": { "type": "boolean", "default": true },
+  "showLocation": { "type": "boolean", "default": true },
+  "enableLoadMore": { "type": "boolean", "default": true },
+  "enableSort": { "type": "boolean", "default": true },
+  "defaultSortOrder": { "type": "string", "default": "ASC" },
+  "textColor": { "type": "string", "default": "#333333" },
+  "headingColor": { "type": "string", "default": "#000000" },
+  "linkColor": { "type": "string", "default": "#0073aa" },
+  "borderColor": { "type": "string", "default": "#dddddd" },
+  "borderWidth": { "type": "number", "default": 1 },
+  "itemPadding": { "type": "number", "default": 20 }
+}
+```
+
+### Block Supports (both blocks)
 - Alignment: `wide`, `full`
 - Anchor: enabled
 - HTML editing: disabled
 
 ## Frontend Interactivity (view.js)
 
-The `EventsGridController` class manages Load More and Sort Toggle for each block instance.
+Both blocks use the same controller pattern for Load More and Sort Toggle. The grid uses `EventsGridController`, the list uses `EventsListController`.
 
 ### How It Works
 1. PHP renders initial events server-side (progressive enhancement — works without JS)
-2. `view.js` reads `data-config` JSON from the grid wrapper element
+2. `view.js` reads `data-config` JSON from the block wrapper element
 3. Each block instance gets its own controller with independent state
 4. REST API calls fetch additional/re-sorted events
-5. JavaScript renders new cards using template literals matching PHP markup exactly
+5. JavaScript renders new items using template literals matching PHP markup exactly
 
 ### Load More Flow
 - User clicks "Load More Events" → JS fetches next page via REST
-- New cards appended before the controls container using `.before()`
+- New items appended before the controls container using `.before()`
 - Button hides when `has_more` is false
 - Status region announces "Loaded X more events" to screen readers
 
 ### Sort Toggle Flow
 - User clicks sort button → JS fetches page 1 with reversed order
-- All existing cards removed, new cards rendered
+- All existing items removed, new items rendered
 - Pagination resets to page 1
 - Button label toggles between "Soonest First" / "Furthest Out First"
 - Status region announces the sort change
 
-### Card Rendering
-- `renderEventCard()` builds HTML matching `render.php` output exactly
-- Same CSS classes, inline styles, custom properties, and accessibility attributes
+### Item Rendering
+- Grid: `renderEventCard()` builds `<article class="snap-event-card">` with card inline styles
+- List: `renderListItem()` builds `<div class="snap-event-list-item">` with border/padding styles
+- Both use the same inner content (title, date, venue, location, excerpt, link)
 - HTML escaping via `textContent`/`innerHTML` DOM pattern (browser-native)
 - `<template>` element used for safe HTML-to-DOM conversion
 
@@ -247,11 +292,11 @@ Hides these blocks on single event pages:
 ```bash
 cd app/public/wp-content/plugins/snap-events
 npm install          # Install dependencies
-npm run build        # Production build
+npm run build        # Production build (grid + list + editor)
 npm run start        # Development watch mode
 ```
 
-The build scripts compile two entry points for the block: `index.js` (editor) and `view.js` (frontend).
+The build scripts compile entry points for each block (`index.js` for editor, `view.js` for frontend) plus the editor sidebar. The `postbuild` hooks copy `block.json` and `render.php` into each block's build directory.
 
 ## Date Handling
 
@@ -267,7 +312,15 @@ The build scripts compile two entry points for the block: `index.js` (editor) an
 
 ## CSS Design System
 
-### Grid Layout
+### Shared Styles (`events-display.css`)
+Content styles used by both blocks:
+- `.snap-event-title` — heading font, margin, link styles
+- `.snap-event-date`, `.snap-event-venue`, `.snap-event-location` — meta field styles
+- `.snap-event-excerpt` — body text styles
+- `.snap-event-link` — "View Event" link styles
+- `.snap-events-no-events` — empty state
+
+### Grid Layout (`events-display.css`)
 ```css
 .snap-events-grid {
     display: grid;
@@ -278,22 +331,37 @@ The build scripts compile two entry points for the block: `index.js` (editor) an
 /* Breakpoints: 980px (2 cols), 767px (1 col) */
 ```
 
-### Card Styling
+### Grid Card Styling
 Configurable via block attributes:
 - Background, text, heading, link colors
 - Padding, border-radius, border, box-shadow
-- Applied via CSS custom properties
+- Applied via CSS custom properties (`--card-heading-color`, `--card-link-color`)
 
-### Interactive Controls
-- `.snap-events-controls` spans full grid width via `grid-column: 1 / -1`
+### List Layout (`events-list.css`)
+- `.snap-event-list-item` — horizontal flexbox row (image left, content right)
+- `.snap-event-list-image` — fixed 150px width, flex-shrink: 0
+- `.snap-event-list-content` — flex: 1, min-width: 0
+- Border-top on container, border-bottom on each item
+- Responsive: stacks vertically at 767px
+
+### List Styling
+Configurable via block attributes:
+- Text, heading, link colors
+- Border color and width (top border + dividers)
+- Item padding (vertical spacing)
+- Applied via CSS custom properties (`--list-heading-color`, `--list-link-color`)
+
+### Interactive Controls (`events-interactive.css`)
+Shared by both blocks:
+- `.snap-events-controls` spans full width (grid-column in grid, margin-top in list)
 - Buttons share consistent styling with hover, focus, and disabled states
 - Sort toggle has a `::before` pseudo-element with Unicode arrow character
 - Responsive: buttons stack vertically below 767px
 
 ## Accessibility
 
-### Card Structure
-- One focusable link per card (the title) — reduces tab stops
+### Card/Item Structure
+- One focusable link per card/item (the title) — reduces tab stops
 - Featured images are decorative: `alt="" role="presentation"`, not wrapped in links
 - "View Event" link has `aria-hidden="true" tabindex="-1"` (visual-only, not in tab order)
 - Title link with `:focus-visible` outline for keyboard navigation
@@ -307,15 +375,12 @@ Configurable via block attributes:
 ## Testing Checklist
 
 When making changes, verify:
+
+### Both Blocks
 - [ ] Events display via block on any page
 - [ ] Only future events appear (past events filtered)
 - [ ] Events sorted by start date ascending
 - [ ] Featured image displays (optional)
-- [ ] Single event page shows meta box
-- [ ] "Written by" and "More posts" hidden on single events
-- [ ] Responsive breakpoints work
-- [ ] Editor sidebar saves all meta fields
-- [ ] Date picker values save correctly
 - [ ] Block preview updates in editor
 - [ ] Load More button appears when more events exist
 - [ ] Load More fetches and appends next page of events
@@ -323,16 +388,34 @@ When making changes, verify:
 - [ ] Sort toggle switches between ASC/DESC order
 - [ ] Sort toggle resets pagination to page 1
 - [ ] Multiple block instances on same page work independently
-- [ ] REST endpoint returns correct JSON at `/wp-json/snap-events/v1/events`
 - [ ] Keyboard navigation: Tab reaches buttons, Enter/Space activates them
 - [ ] Screen reader: status region announces load/sort changes
+
+### Grid Block
+- [ ] Column count changes (1–4)
+- [ ] Card styling attributes apply (background, padding, border-radius, shadow)
+- [ ] Grid gap adjusts spacing between cards
+- [ ] Responsive: 2 columns at 980px, 1 column at 767px
+
+### List Block
+- [ ] Single-column layout with horizontal rows (image left, content right)
+- [ ] Border-top on list, border-bottom dividers between items
+- [ ] Border color/width and item padding are configurable
+- [ ] Responsive: stacks vertically at 767px
+
+### General
+- [ ] Single event page shows meta box
+- [ ] "Written by" and "More posts" hidden on single events
+- [ ] Editor sidebar saves all meta fields
+- [ ] Date picker values save correctly
+- [ ] REST endpoint returns correct JSON at `/wp-json/snap-events/v1/events`
 
 ## Key Differences from CUALS Plugin
 
 | Feature | CUALS (Old) | Snap Events (Current) |
 |---------|-------------|----------------------|
 | Post Type | `cuals_event` | `snap_event` |
-| Rendering | Shortcode | Gutenberg Block |
+| Rendering | Shortcode | Gutenberg Blocks (Grid + List) |
 | Meta Input | Classic meta boxes | Editor sidebar (React) |
 | Thumbnails | Forced default SVG | Native WordPress |
 | Single Template | Custom PHP template | Content/block filters |

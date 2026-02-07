@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "snap-events/events-list",
+    "version": "1.0.0",
+    "title": "Events List",
+    "category": "widgets",
+    "icon": "list-view",
+    "description": "Display upcoming events in a single-column list with dividers.",
+    "keywords": [ "events", "calendar", "list", "upcoming" ],
+    "textdomain": "snap-events",
+    "attributes": {
+        "anchor": {
+            "type": "string",
+            "default": ""
+        },
+        "count": {
+            "type": "number",
+            "default": 6
+        },
+        "showExcerpt": {
+            "type": "boolean",
+            "default": true
+        },
+        "showImage": {
+            "type": "boolean",
+            "default": true
+        },
+        "showDate": {
+            "type": "boolean",
+            "default": true
+        },
+        "showLocation": {
+            "type": "boolean",
+            "default": true
+        },
+        "enableLoadMore": {
+            "type": "boolean",
+            "default": true
+        },
+        "enableSort": {
+            "type": "boolean",
+            "default": true
+        },
+        "defaultSortOrder": {
+            "type": "string",
+            "default": "ASC"
+        },
+        "textColor": {
+            "type": "string",
+            "default": "#333333"
+        },
+        "headingColor": {
+            "type": "string",
+            "default": "#000000"
+        },
+        "linkColor": {
+            "type": "string",
+            "default": "#0073aa"
+        },
+        "borderColor": {
+            "type": "string",
+            "default": "#dddddd"
+        },
+        "borderWidth": {
+            "type": "number",
+            "default": 1
+        },
+        "itemPadding": {
+            "type": "number",
+            "default": 20
+        }
+    },
+    "supports": {
+        "html": false,
+        "anchor": true,
+        "align": [ "wide", "full" ]
+    },
+    "editorScript": "file:./index.js",
+    "viewScript": "file:./view.js",
+    "render": "file:./render.php"
+}

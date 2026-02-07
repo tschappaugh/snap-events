@@ -1,6 +1,6 @@
 <?php
 /**
- * Block registration for the Events Grid block
+ * Block registration for the Events Grid and Events List blocks
  *
  * @package Snap_Events
  */
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Snap_Events_Block
  *
- * Registers the Events Grid Gutenberg block and editor sidebar.
+ * Registers the Events Grid and Events List Gutenberg blocks and editor sidebar.
  */
 class Snap_Events_Block {
 
@@ -29,10 +29,10 @@ class Snap_Events_Block {
     }
 
     /**
-     * Register the block with WordPress
+     * Register blocks with WordPress
      *
      * Uses block.json metadata for configuration.
-     * The render.php template handles server-side rendering.
+     * Each block's render.php template handles server-side rendering.
      */
     public function register_block() {
         // Register the frontend stylesheet (loads in both editor and frontend)
@@ -51,13 +51,33 @@ class Snap_Events_Block {
             SNAP_EVENTS_VERSION
         );
 
-        // Register block with both styles
+        // Register the list layout stylesheet
+        wp_register_style(
+            'snap-events-list-style',
+            SNAP_EVENTS_PLUGIN_URL . 'assets/css/events-list.css',
+            [],
+            SNAP_EVENTS_VERSION
+        );
+
+        // Register the events grid block with its styles
         register_block_type(
             SNAP_EVENTS_PLUGIN_DIR . 'build/blocks/events-grid',
             [
                 'style' => [
                     'snap-events-grid-style',
                     'snap-events-interactive-style',
+                ],
+            ]
+        );
+
+        // Register the events list block with its styles
+        register_block_type(
+            SNAP_EVENTS_PLUGIN_DIR . 'build/blocks/events-list',
+            [
+                'style' => [
+                    'snap-events-grid-style',
+                    'snap-events-interactive-style',
+                    'snap-events-list-style',
                 ],
             ]
         );

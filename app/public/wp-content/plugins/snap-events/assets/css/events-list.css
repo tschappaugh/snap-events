@@ -1,0 +1,85 @@
+/**
+ * Snap Events - List Layout Styles
+ *
+ * Styles specific to the Events List block.
+ * Button/control styles are in events-interactive.css.
+ * Inner content styles (title, date, etc.) are in events-display.css.
+ */
+
+/* ==========================================================================
+   List Item - Horizontal Row Layout
+   ========================================================================== */
+
+.snap-event-list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* ==========================================================================
+   List Item Image
+   ========================================================================== */
+
+.snap-event-list-image {
+    flex-shrink: 0;
+    width: 150px;
+}
+
+.snap-event-list-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   List Item Content
+   ========================================================================== */
+
+.snap-event-list-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Override title margin for tighter list spacing */
+.snap-event-list-content .snap-event-title {
+    margin-bottom: 10px;
+}
+
+/* Override excerpt margin for tighter list spacing */
+.snap-event-list-content .snap-event-excerpt {
+    margin-bottom: 10px;
+}
+
+/* ==========================================================================
+   Controls - Full Width in List
+   ========================================================================== */
+
+.snap-events-list .snap-events-controls {
+    margin-top: 20px;
+}
+
+/* ==========================================================================
+   Empty State
+   ========================================================================== */
+
+.snap-events-list .snap-events-no-events {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .snap-event-list-item {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .snap-event-list-image {
+        width: 100%;
+    }
+}
