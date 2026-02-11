@@ -285,9 +285,14 @@
 
 			if ( this.loadMoreBtn ) {
 				this.loadMoreBtn.disabled = loading;
-				this.loadMoreBtn.textContent = loading
-					? 'Loading...'
-					: 'Load More Events';
+				const label = this.loadMoreBtn.querySelector(
+					'.snap-events-load-more-label'
+				);
+				if ( label ) {
+					label.textContent = loading
+						? 'Loading...'
+						: 'Load More Events';
+				}
 			}
 
 			if ( this.sortBtn ) {

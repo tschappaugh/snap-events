@@ -209,10 +209,10 @@
 
 			html += '<div class="snap-event-content">';
 			html +=
-				'<h3 class="snap-event-title" style="color: var(--card-heading-color, #ffffff);">' +
+				'<h3 class="snap-event-title" style="color: var(--card-heading-color, #000000);">' +
 				'<a href="' +
 				this.escAttr( event.permalink ) +
-				'" style="color: var(--card-heading-color, #ffffff);">' +
+				'" style="color: var(--card-heading-color, #000000);">' +
 				this.escHtml( event.title ) +
 				'</a></h3>';
 
@@ -256,7 +256,7 @@
 				'<a href="' +
 				this.escAttr( event.permalink ) +
 				'" class="snap-event-link" ' +
-				'style="color: var(--card-link-color, #ffffff);" ' +
+				'style="color: var(--card-link-color, #0073aa);" ' +
 				'aria-hidden="true" tabindex="-1">View Event</a>';
 
 			html += '</div></article>';
@@ -316,9 +316,14 @@
 
 			if ( this.loadMoreBtn ) {
 				this.loadMoreBtn.disabled = loading;
-				this.loadMoreBtn.textContent = loading
-					? 'Loading...'
-					: 'Load More Events';
+				const label = this.loadMoreBtn.querySelector(
+					'.snap-events-load-more-label'
+				);
+				if ( label ) {
+					label.textContent = loading
+						? 'Loading...'
+						: 'Load More Events';
+				}
 			}
 
 			if ( this.sortBtn ) {

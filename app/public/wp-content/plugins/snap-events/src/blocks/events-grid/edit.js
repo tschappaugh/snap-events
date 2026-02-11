@@ -43,6 +43,13 @@ export default function Edit( { attributes, setAttributes } ) {
         enableLoadMore,
         enableSort,
         defaultSortOrder,
+        buttonBackgroundColor,
+        buttonTextColor,
+        buttonBorderColor,
+        buttonBorderWidth,
+        buttonBorderRadius,
+        buttonBoxShadow,
+
     } = attributes;
 
     const blockProps = useBlockProps();
@@ -189,6 +196,50 @@ export default function Edit( { attributes, setAttributes } ) {
                         </>
                     ) }
                 </PanelBody>
+                <PanelBody title={ __( 'Button Styles', 'snap-events' ) } initialOpen={ false }>
+                    <p>{ __( 'Background Color', 'snap-events' ) }</p>
+                    <ColorPalette
+                        colors={ themeColors }
+                        value={ buttonBackgroundColor }
+                        onChange={ ( value ) => setAttributes( { buttonBackgroundColor: value } ) }
+                    />
+                    <p>{ __( 'Text Color', 'snap-events' ) }</p>
+                    <ColorPalette
+                        colors={ themeColors }
+                        value={ buttonTextColor }
+                        onChange={ ( value ) => setAttributes( { buttonTextColor: value } ) }
+                    />
+                    <RangeControl
+                        label={ __( 'Border Radius (px)', 'snap-events' ) }
+                        value={ buttonBorderRadius }
+                        onChange={ ( value ) => setAttributes( { buttonBorderRadius: value } ) }
+                        min={ 0 }
+                        max={ 30 }
+                    />
+                    <ToggleControl
+                        label={ __( 'Drop Shadow', 'snap-events' ) }
+                        checked={ buttonBoxShadow }
+                        onChange={ ( value ) => setAttributes( { buttonBoxShadow: value } ) }
+                    />
+                    <RangeControl
+                        label={ __( 'Border Width (px)', 'snap-events' ) }
+                        value={ buttonBorderWidth }
+                        onChange={ ( value ) => setAttributes( { buttonBorderWidth: value } ) }
+                        min={ 0 }
+                        max={ 5 }
+                    />
+                    { buttonBorderWidth > 0 && (
+                        <>
+                            <p>{ __( 'Border Color', 'snap-events' ) }</p>
+                            <ColorPalette
+                                colors={ themeColors }
+                                value={ buttonBorderColor }
+                                onChange={ ( value ) => setAttributes( { buttonBorderColor: value } ) }
+                            />
+                        </>
+                    ) }
+                </PanelBody>
+
             </InspectorControls>
 
             <div { ...blockProps }>

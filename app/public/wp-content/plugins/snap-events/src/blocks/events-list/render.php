@@ -32,6 +32,15 @@ $border_color  = isset( $attributes['borderColor'] ) ? $attributes['borderColor'
 $border_width  = isset( $attributes['borderWidth'] ) ? $attributes['borderWidth'] : 1;
 $item_padding  = isset( $attributes['itemPadding'] ) ? $attributes['itemPadding'] : 20;
 
+// Button style attributes
+$btn_bg_color      = isset( $attributes['buttonBackgroundColor'] ) ? $attributes['buttonBackgroundColor'] : '#333333';
+$btn_text_color    = isset( $attributes['buttonTextColor'] ) ? $attributes['buttonTextColor'] : '#ffffff';
+$btn_border_color  = isset( $attributes['buttonBorderColor'] ) ? $attributes['buttonBorderColor'] : '#333333';
+$btn_border_width  = isset( $attributes['buttonBorderWidth'] ) ? $attributes['buttonBorderWidth'] : 0;
+$btn_border_radius = isset( $attributes['buttonBorderRadius'] ) ? $attributes['buttonBorderRadius'] : 4;
+$btn_box_shadow    = isset( $attributes['buttonBoxShadow'] ) ? $attributes['buttonBoxShadow'] : false;
+$btn_shadow_style = $btn_box_shadow ? 'box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);' : '';
+
 // Query events using our query class
 $events = Snap_Events_Query::get_events( [
     'posts_per_page' => $count,
@@ -66,7 +75,7 @@ $block_config = wp_json_encode( [
 $anchor = ! empty( $attributes['anchor'] ) ? $attributes['anchor'] : '';
 $wrapper_attrs = [
     'class'       => 'snap-events-list',
-    'style'       => 'border-top: ' . intval( $border_width ) . 'px solid ' . esc_attr( $border_color ) . '; color: ' . esc_attr( $text_color ) . '; --list-heading-color: ' . esc_attr( $heading_color ) . '; --list-link-color: ' . esc_attr( $link_color ) . ';',
+    'style'       => 'border-top: ' . intval( $border_width ) . 'px solid ' . esc_attr( $border_color ) . '; color: ' . esc_attr( $text_color ) . '; --list-heading-color: ' . esc_attr( $heading_color ) . '; --list-link-color: ' . esc_attr( $link_color ) . '; --btn-bg: ' . esc_attr( $btn_bg_color ) . '; --btn-color: ' . esc_attr( $btn_text_color ) . '; --btn-radius: ' . intval( $btn_border_radius ) . 'px; --btn-border: ' . intval( $btn_border_width ) . 'px solid ' . esc_attr( $btn_border_color ) . ';',
     'data-config' => $block_config,
 ];
 
@@ -146,7 +155,8 @@ if ( empty( $events ) ) {
     <?php if ( $enable_sort || $enable_load_more ) : ?>
         <div class="snap-events-controls">
             <?php if ( $enable_sort ) : ?>
-                <button class="snap-events-sort-toggle" data-current-order="<?php echo esc_attr( $default_sort_order ); ?>" aria-label="<?php esc_attr_e( 'Toggle sort order', 'snap-events' ); ?>">
+                <button class="snap-events-sort-toggle" style="<?php echo $btn_shadow_style; ?>" data-current-order="<?php echo esc_attr( $default_sort_order ); ?>" aria-label="<?php esc_attr_e( 'Toggle sort order', 'snap-events' ); ?>">
+                    <svg class="snap-events-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M7 4l-4 4M7 4l4 4M17 20V4M17 20l-4-4M17 20l4-4"/></svg>
                     <span class="snap-events-sort-label">
                         <?php echo $default_sort_order === 'ASC'
                             ? esc_html__( 'Soonest First', 'snap-events' )
@@ -156,8 +166,9 @@ if ( empty( $events ) ) {
             <?php endif; ?>
 
             <?php if ( $enable_load_more ) : ?>
-                <button class="snap-events-load-more<?php echo ! $has_more ? ' snap-events-hidden' : ''; ?>" aria-label="<?php esc_attr_e( 'Load more events', 'snap-events' ); ?>">
-                    <?php esc_html_e( 'Load More Events', 'snap-events' ); ?>
+                <button class="snap-events-load-more<?php echo ! $has_more ? ' snap-events-hidden' : ''; ?>" style="<?php echo $btn_shadow_style; ?>" aria-label="<?php esc_attr_e( 'Load more events', 'snap-events' ); ?>">
+                    <svg class="snap-events-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                    <span class="snap-events-load-more-label"><?php esc_html_e( 'Load More Events', 'snap-events' ); ?></span>
                 </button>
             <?php endif; ?>
 

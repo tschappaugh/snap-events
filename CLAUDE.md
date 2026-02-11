@@ -196,19 +196,25 @@ snap-events/
   "showImage": { "type": "boolean", "default": true },
   "showDate": { "type": "boolean", "default": true },
   "showLocation": { "type": "boolean", "default": true },
-  "enableLoadMore": { "type": "boolean", "default": true },
-  "enableSort": { "type": "boolean", "default": true },
-  "defaultSortOrder": { "type": "string", "default": "ASC" },
-  "cardBackgroundColor": { "type": "string", "default": "#2e3858" },
-  "cardTextColor": { "type": "string", "default": "rgba(255, 255, 255, 0.7)" },
-  "cardHeadingColor": { "type": "string", "default": "#ffffff" },
-  "cardLinkColor": { "type": "string", "default": "#ffffff" },
+  "cardBackgroundColor": { "type": "string", "default": "#f5f5f5" },
+  "cardTextColor": { "type": "string", "default": "#333333" },
+  "cardHeadingColor": { "type": "string", "default": "#000000" },
+  "cardLinkColor": { "type": "string", "default": "#0073aa" },
   "cardPadding": { "type": "number", "default": 30 },
   "cardBorderRadius": { "type": "number", "default": 0 },
   "cardBoxShadow": { "type": "boolean", "default": false },
   "cardBorderWidth": { "type": "number", "default": 0 },
   "cardBorderColor": { "type": "string", "default": "#cccccc" },
-  "gridGap": { "type": "number", "default": 30 }
+  "gridGap": { "type": "number", "default": 30 },
+  "buttonBackgroundColor": { "type": "string", "default": "#333333" },
+  "buttonTextColor": { "type": "string", "default": "#ffffff" },
+  "buttonBorderColor": { "type": "string", "default": "#333333" },
+  "buttonBorderWidth": { "type": "number", "default": 0 },
+  "buttonBorderRadius": { "type": "number", "default": 4 },
+  "buttonBoxShadow": { "type": "boolean", "default": false },
+  "enableLoadMore": { "type": "boolean", "default": true },
+  "enableSort": { "type": "boolean", "default": true },
+  "defaultSortOrder": { "type": "string", "default": "ASC" }
 }
 ```
 
@@ -229,7 +235,13 @@ snap-events/
   "linkColor": { "type": "string", "default": "#0073aa" },
   "borderColor": { "type": "string", "default": "#dddddd" },
   "borderWidth": { "type": "number", "default": 1 },
-  "itemPadding": { "type": "number", "default": 20 }
+  "itemPadding": { "type": "number", "default": 20 },
+  "buttonBackgroundColor": { "type": "string", "default": "#333333" },
+  "buttonTextColor": { "type": "string", "default": "#ffffff" },
+  "buttonBorderColor": { "type": "string", "default": "#333333" },
+  "buttonBorderWidth": { "type": "number", "default": 0 },
+  "buttonBorderRadius": { "type": "number", "default": 4 },
+  "buttonBoxShadow": { "type": "boolean", "default": false }
 }
 ```
 
@@ -353,10 +365,27 @@ Configurable via block attributes:
 
 ### Interactive Controls (`events-interactive.css`)
 Shared by both blocks:
-- `.snap-events-controls` spans full width (grid-column in grid, margin-top in list)
-- Buttons share consistent styling with hover, focus, and disabled states
-- Sort toggle has a `::before` pseudo-element with Unicode arrow character
+- `.snap-events-controls` spans full width (`grid-column: 1 / -1` in grid, `margin-top` in list)
+- Buttons use `display: inline-flex` with inline SVG icons (`stroke="currentColor"`)
+- Hover state via `filter: brightness(0.85)` — works with any button color
+- Focus ring via `:focus-visible` with `3px solid #4a90e2` outline
+- Disabled state: `opacity: 0.6; cursor: not-allowed`
+- `.snap-events-hidden` utility class for toggling button visibility
 - Responsive: buttons stack vertically below 767px
+
+### Button Styling (shared by both blocks)
+Both blocks expose the same 6 button attributes in the "Button Styles" inspector panel:
+- `buttonBackgroundColor`, `buttonTextColor` — base colors
+- `buttonBorderColor`, `buttonBorderWidth` — optional border
+- `buttonBorderRadius` — corner rounding
+- `buttonBoxShadow` — drop shadow toggle
+
+**How button styles are applied:**
+- Colors, border, and radius use CSS custom properties on the block wrapper element:
+  `--btn-bg`, `--btn-color`, `--btn-border`, `--btn-radius`
+- `events-interactive.css` reads these via `var(--btn-bg, #333333)` etc.
+- Box shadow is applied as an **inline style** directly on each button element (not via CSS custom property) because theme CSS frequently overrides `box-shadow` declarations with higher specificity
+- Shadow value: `box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3)` when enabled
 
 ## Accessibility
 
@@ -402,6 +431,13 @@ When making changes, verify:
 - [ ] Border-top on list, border-bottom dividers between items
 - [ ] Border color/width and item padding are configurable
 - [ ] Responsive: stacks vertically at 767px
+
+### Button Styles (both blocks)
+- [ ] Button background and text colors apply from inspector settings
+- [ ] Button border width, color, and radius apply correctly
+- [ ] Button drop shadow appears when enabled, disappears when disabled
+- [ ] Button styles persist after page reload
+- [ ] Button hover state darkens the button (brightness filter)
 
 ### General
 - [ ] Single event page shows meta box

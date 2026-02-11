@@ -69,6 +69,30 @@
         "itemPadding": {
             "type": "number",
             "default": 20
+        },
+        "buttonBackgroundColor": {
+            "type": "string",
+            "default": "#333333"
+        },
+        "buttonTextColor": {
+            "type": "string",
+            "default": "#ffffff"
+        },
+        "buttonBorderColor": {
+            "type": "string",
+            "default": "#333333"
+        },
+        "buttonBorderWidth": {
+            "type": "number",
+            "default": 0
+        },
+        "buttonBorderRadius": {
+            "type": "number",
+            "default": 4
+        },
+        "buttonBoxShadow": {
+            "type": "boolean",
+            "default": false
         }
     },
     "supports": {

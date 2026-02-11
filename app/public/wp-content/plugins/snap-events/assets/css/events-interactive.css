@@ -24,23 +24,25 @@
 
 .snap-events-sort-toggle,
 .snap-events-load-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 12px 24px;
     font-size: 16px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border: 2px solid #2e3858;
-    background-color: #2e3858;
-    color: #ffffff;
+    background-color: var(--btn-bg, #333333);
+    color: var(--btn-color, #ffffff);
+    border: var(--btn-border, 0);
+    border-radius: var(--btn-radius, 4px);
     cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition: filter 0.2s ease;
 }
 
 .snap-events-sort-toggle:hover,
 .snap-events-load-more:hover {
-    background-color: #1e2848;
-    border-color: #1e2848;
+    filter: brightness(0.85);
 }
 
 /* ==========================================================================
@@ -60,13 +62,11 @@
 }
 
 /* ==========================================================================
-   Sort Toggle
+   Button Icons
    ========================================================================== */
 
-.snap-events-sort-toggle::before {
-    content: '\21C5';
-    margin-right: 8px;
-    font-size: 18px;
+.snap-events-icon {
+    flex-shrink: 0;
 }
 
 /* ==========================================================================
