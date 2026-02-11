@@ -67,6 +67,12 @@ class Snap_Events_Query {
 
         $query_args['meta_query'] = $meta_query;
 
+        // Shorten excerpts for event displays
+        $limit_excerpt = function () {
+            return 25;
+        };
+        add_filter( 'excerpt_length', $limit_excerpt, 999 );
+
         // Execute the query
         $query = new WP_Query( $query_args );
         $events = [];
@@ -93,6 +99,7 @@ class Snap_Events_Query {
             }
 
             wp_reset_postdata();
+            remove_filter( 'excerpt_length', $limit_excerpt, 999 );
         }
 
         return $events;
