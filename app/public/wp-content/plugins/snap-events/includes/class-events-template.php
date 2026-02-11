@@ -106,6 +106,7 @@ class Snap_Events_Template {
         $blocks_to_hide = [
             'core/post-author',
             'core/post-author-name',
+            'core/post-date',
             'core/post-terms',
             'core/query',
         ];
@@ -114,10 +115,10 @@ class Snap_Events_Template {
             return '';
         }
 
-        // Hide paragraph blocks containing only "Written by " or "in"
+        // Hide paragraph blocks containing only "Written by", "in", or single-char separators
         if ( 'core/paragraph' === $block['blockName'] ) {
             $text = trim( strip_tags( $block_content ) );
-            if ( $text === 'Written by' || $text === 'in' ) {
+            if ( $text === 'Written by' || $text === 'in' || mb_strlen( $text ) === 1 ) {
                 return '';
             }
         }

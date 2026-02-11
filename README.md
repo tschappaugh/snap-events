@@ -92,6 +92,18 @@ Use `npm run start` for a development watch mode that recompiles on file changes
 
 3. **Single event pages**: Each event automatically gets its own page at `/events/event-slug/`. The plugin prepends the event date and location details above the post content.
 
+## Theme compatibility
+
+The plugin works with any WordPress block theme. On single event pages, it automatically hides post-meta blocks (author, date, categories, tags) that aren't relevant to events and prepends the event details (date, venue, location) above the content.
+
+Some themes don't include a Featured Image block in their single post template. If event thumbnails aren't showing on single event pages, add the Featured Image block to your theme's single post template:
+
+1. Go to **Appearance > Editor > Templates > Single Posts**
+2. Add a **Featured Image** block above or below the title
+3. Save the template
+
+This is a one-time change per theme and won't be overwritten by plugin updates.
+
 ## File Structure
 
 ```
