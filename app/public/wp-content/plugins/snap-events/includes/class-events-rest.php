@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Snap_Events_REST {
 
-    const NAMESPACE = 'snap-events/v1';
+    const REST_NAMESPACE = 'snap-events/v1';
     const ROUTE     = '/events';
 
     /**
@@ -33,7 +33,7 @@ class Snap_Events_REST {
      */
     public function register_routes() {
         register_rest_route(
-            self::NAMESPACE,
+            self::REST_NAMESPACE,
             self::ROUTE,
             [
                 'methods'             => WP_REST_Server::READABLE,

@@ -91,7 +91,6 @@ $block_config = wp_json_encode( [
     'cardBorderWidth'     => $card_border_width,
     'cardBorderColor'     => $card_border_color,
     'restUrl'             => esc_url_raw( rest_url( 'snap-events/v1/events' ) ),
-    'restNonce'           => wp_create_nonce( 'wp_rest' ),
 ] );
 
 // Get block wrapper attributes (applies color, spacing, etc. from block supports)
@@ -109,6 +108,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 
 // Start output
 if ( empty( $events ) ) {
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output from get_block_wrapper_attributes() is pre-escaped.
     printf(
         '<div %s><p class="snap-events-no-events">%s</p></div>',
         $wrapper_attributes,
@@ -117,9 +117,10 @@ if ( empty( $events ) ) {
     return;
 }
 ?>
+<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output from get_block_wrapper_attributes() is pre-escaped. ?>
 <div <?php echo $wrapper_attributes; ?>>
     <?php foreach ( $events as $event ) : ?>
-        <article class="snap-event-card" style="<?php echo $card_style; ?> --card-heading-color: <?php echo esc_attr( $card_heading_color ); ?>; --card-link-color: <?php echo esc_attr( $card_link_color ); ?>;">
+        <article class="snap-event-card" style="<?php echo esc_attr( $card_style . ' --card-heading-color: ' . $card_heading_color . '; --card-link-color: ' . $card_link_color . ';' ); ?>">
             
             <?php if ( $show_image && ! empty( $event['thumbnail_url'] ) ) : ?>
                 <div class="snap-event-image">
@@ -179,7 +180,7 @@ if ( empty( $events ) ) {
     <?php if ( $enable_sort || $enable_load_more ) : ?>
         <div class="snap-events-controls">
     <?php if ( $enable_sort ) : ?>
-        <button class="snap-events-sort-toggle" style="<?php echo $btn_shadow_style; ?>" data-current-order="<?php echo esc_attr( $default_sort_order ); ?>" aria-label="<?php esc_attr_e( 'Toggle sort order', 'snap-events' ); ?>">
+        <button class="snap-events-sort-toggle" style="<?php echo esc_attr( $btn_shadow_style ); ?>" data-current-order="<?php echo esc_attr( $default_sort_order ); ?>" aria-label="<?php esc_attr_e( 'Toggle sort order', 'snap-events' ); ?>">
             <svg class="snap-events-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M7 4l-4 4M7 4l4 4M17 20V4M17 20l-4-4M17 20l4-4"/></svg>
             <span class="snap-events-sort-label">
                 <?php echo $default_sort_order === 'ASC'
@@ -190,7 +191,7 @@ if ( empty( $events ) ) {
     <?php endif; ?>
 
     <?php if ( $enable_load_more ) : ?>
-        <button class="snap-events-load-more<?php echo ! $has_more ? ' snap-events-hidden' : ''; ?>" style="<?php echo $btn_shadow_style; ?>" aria-label="<?php esc_attr_e( 'Load more events', 'snap-events' ); ?>">
+        <button class="snap-events-load-more<?php echo ! $has_more ? ' snap-events-hidden' : ''; ?>" style="<?php echo esc_attr( $btn_shadow_style ); ?>" aria-label="<?php esc_attr_e( 'Load more events', 'snap-events' ); ?>">
             <svg class="snap-events-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
             <span class="snap-events-load-more-label"><?php esc_html_e( 'Load More Events', 'snap-events' ); ?></span>
         </button>

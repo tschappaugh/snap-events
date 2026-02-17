@@ -87,7 +87,6 @@ class Snap_Events_Query {
                     'title'         => get_the_title(),
                     'permalink'     => get_permalink(),
                     'excerpt'       => get_the_excerpt(),
-                    'content'       => get_the_content(),
                     'thumbnail_url' => get_the_post_thumbnail_url( $post_id, 'medium' ),
                     'start_date'    => self::format_date( get_post_meta( $post_id, 'start_date', true ) ),
                     'end_date'      => self::format_date( get_post_meta( $post_id, 'end_date', true ) ),
@@ -99,8 +98,9 @@ class Snap_Events_Query {
             }
 
             wp_reset_postdata();
-            remove_filter( 'excerpt_length', $limit_excerpt, 999 );
         }
+
+        remove_filter( 'excerpt_length', $limit_excerpt, 999 );
 
         return $events;
     }

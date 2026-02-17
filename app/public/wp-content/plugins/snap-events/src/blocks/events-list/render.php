@@ -68,7 +68,6 @@ $block_config = wp_json_encode( [
     'borderWidth'      => $border_width,
     'itemPadding'      => $item_padding,
     'restUrl'          => esc_url_raw( rest_url( 'snap-events/v1/events' ) ),
-    'restNonce'        => wp_create_nonce( 'wp_rest' ),
 ] );
 
 // Get block wrapper attributes
@@ -86,6 +85,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 
 // Start output
 if ( empty( $events ) ) {
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output from get_block_wrapper_attributes() is pre-escaped.
     printf(
         '<div %s><p class="snap-events-no-events">%s</p></div>',
         $wrapper_attributes,
@@ -95,6 +95,7 @@ if ( empty( $events ) ) {
 }
 
 ?>
+<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output from get_block_wrapper_attributes() is pre-escaped. ?>
 <div <?php echo $wrapper_attributes; ?>>
     <?php foreach ( $events as $event ) : ?>
         <div class="snap-event-list-item" style="border-bottom: <?php echo intval( $border_width ); ?>px solid <?php echo esc_attr( $border_color ); ?>; padding: <?php echo intval( $item_padding ); ?>px 0;">
@@ -155,7 +156,7 @@ if ( empty( $events ) ) {
     <?php if ( $enable_sort || $enable_load_more ) : ?>
         <div class="snap-events-controls">
             <?php if ( $enable_sort ) : ?>
-                <button class="snap-events-sort-toggle" style="<?php echo $btn_shadow_style; ?>" data-current-order="<?php echo esc_attr( $default_sort_order ); ?>" aria-label="<?php esc_attr_e( 'Toggle sort order', 'snap-events' ); ?>">
+                <button class="snap-events-sort-toggle" style="<?php echo esc_attr( $btn_shadow_style ); ?>" data-current-order="<?php echo esc_attr( $default_sort_order ); ?>" aria-label="<?php esc_attr_e( 'Toggle sort order', 'snap-events' ); ?>">
                     <svg class="snap-events-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M7 4l-4 4M7 4l4 4M17 20V4M17 20l-4-4M17 20l4-4"/></svg>
                     <span class="snap-events-sort-label">
                         <?php echo $default_sort_order === 'ASC'
@@ -166,7 +167,7 @@ if ( empty( $events ) ) {
             <?php endif; ?>
 
             <?php if ( $enable_load_more ) : ?>
-                <button class="snap-events-load-more<?php echo ! $has_more ? ' snap-events-hidden' : ''; ?>" style="<?php echo $btn_shadow_style; ?>" aria-label="<?php esc_attr_e( 'Load more events', 'snap-events' ); ?>">
+                <button class="snap-events-load-more<?php echo ! $has_more ? ' snap-events-hidden' : ''; ?>" style="<?php echo esc_attr( $btn_shadow_style ); ?>" aria-label="<?php esc_attr_e( 'Load more events', 'snap-events' ); ?>">
                     <svg class="snap-events-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                     <span class="snap-events-load-more-label"><?php esc_html_e( 'Load More Events', 'snap-events' ); ?></span>
                 </button>

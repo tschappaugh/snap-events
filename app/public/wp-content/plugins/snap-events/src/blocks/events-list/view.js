@@ -152,12 +152,7 @@
 			url.searchParams.set( 'per_page', this.config.count );
 			url.searchParams.set( 'order', order );
 
-			const response = await fetch( url.toString(), {
-				method: 'GET',
-				headers: {
-					'X-WP-Nonce': this.config.restNonce,
-				},
-			} );
+			const response = await fetch( url.toString() );
 
 			if ( ! response.ok ) {
 				throw new Error( 'HTTP error: ' + response.status );
@@ -249,7 +244,7 @@
 			if ( c.showExcerpt && event.excerpt ) {
 				html +=
 					'<div class="snap-event-excerpt">' +
-					event.excerpt +
+					this.escHtml( event.excerpt ) +
 					'</div>';
 			}
 
