@@ -2,6 +2,12 @@
 
 A WordPress plugin that displays upcoming events using Gutenberg blocks. Built as a portfolio project to demonstrate modern WordPress development practices.
 
+## Live Demo
+
+See the plugin in action: **[snapevents.tonyschappaugh.com](https://snapevents.tonyschappaugh.com)**
+
+The demo site showcases both the Events Grid and Events List blocks with live event data.
+
 ## Skills Demonstrated
 
 ### PHP / WordPress Backend
